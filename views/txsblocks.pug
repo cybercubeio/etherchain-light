@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h3 Blocks with transactions
+  table.table
+    thead
+      tr
+        th Number
+        th Time
+        th # Tx
+    tbody
+      for block in blocks
+        tr
+          td
+            a(href="/block/" + block.number) #{block.number}
+          td #{block.timestamp}
+          td #{block.txs}

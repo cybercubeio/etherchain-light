@@ -1,14 +1,17 @@
 var express = require('express');
 var router = express.Router();
-
+var clickcoin = require('../utils/clickcoin');
 var async = require('async');
 var Web3 = require('web3');
+
 
 router.get('/:offset?', function(req, res, next) {
   var config = req.app.get('config');  
   var web3 = new Web3();
   web3.setProvider(config.provider);
-  
+  var ClickCoinContract = web3.eth.contract(clickcoin.abi);
+  var contract = ClickCoinContract.at(clickcoin.address);
+
   async.waterfall([
     function(callback) {
       web3.parity.listAccounts(20, req.params.offset, function(err, result) {
@@ -36,8 +39,7 @@ router.get('/:offset?', function(req, res, next) {
           data[account] = {};
           data[account].address = account;
           data[account].type = code.length > 2 ? "Contract" : "Account";
-          
-          web3.eth.getBalance(account, function(err, balance) {
+          contract.balanceOf.call(account, function(err, balance) {
             if (err) {
               return eachCallback(err);
             }

@@ -26,24 +26,6 @@ block content
           a(href="/account/" + tx.to) #{nameformatter.format(tx.to)}
         else
           | New Contract
-    tr
-      td Amount:
-      td #{ethformatter(tx.value)}
-    tr
-      td Nonce:
-      td #{tx.nonce}
-    tr
-      td Gas Limit:
-      td #{tx.gas}
-    tr
-      td Gas Used:
-      td #{tx.gasUsed}
-    tr
-      td Gas Price: 
-      td #{ethformatter(tx.gasPrice)}
-    tr
-      td Fee:
-      td #{ethformatter(tx.gasUsed * tx.gasPrice)}
     if tx.callInfo
       tr
         td Function Name:
@@ -101,8 +83,99 @@ block content
       td Data:
       td
         pre #{tx.input}
-    
+    tr
+      td Raw Decoded data:
+      td
+        pre #{tx.decoded}
+    tr
+      td Operation:
+      td #{tx.operation}
+    if tx.internalGameId
+      tr
+        td Internal game ID:
+        td #{tx.internalGameId}
+    if tx.gamers
+      tr
+        td Gamers:
+          td
+            for gamer in tx.gamers
+              a(href="/account/" + gamer) #{gamer}
+              br
+    if tx.winners
+      tr
+        td Winners:
+          td
+            for gamer in tx.winners
+              a(href="/account/" + gamer) #{gamer}
+              br
+    if tx.bet
+      tr
+        td Bet:
+        td #{tx.bet}
+    if tx.sender
+      tr
+        td Sender address:
+        td
+          a(href="/account/" + tx.sender) #{tx.sender}
+    if tx.recipient
+      tr
+        td Recipient address:
+        td
+          a(href="/account/" + tx.recipient) #{tx.recipient}
+    if tx.coinsTransferred
+      tr
+        td Amount of ClickCoins transferred:
+        td #{tx.coinsTransferred}
+
+    if tx.refunders
+      tr
+        td Refund addresses:
+          td
+            for gamer in tx.refunders
+              a(href="/account/" + gamer) #{gamer}
+              br
+    if tx.abusers
+      tr
+        td Abusers addresses:
+          td
+            for gamer in tx.abusers
+              a(href="/account/" + gamer) #{gamer}
+              br
+    if tx.refundAmount
+      tr
+        td Amount of ClickCoins refunded:
+        td #{tx.refundAmount}
+    if tx.internalCaseId
+      tr
+        td Internal case ID:
+        td #{tx.internalCaseId}
+
   a(href="/tx/raw/" + tx.hash) Raw Trace
+
+  if tx.events
+    h4 Events
+    table.table
+      thead
+        tr
+          th Block
+          th Time
+          th From
+          th To
+          th Value
+          th Fee
+      tbody
+        for event in tx.events
+          tr
+            td
+              a(href="/block/" + event.height) #{event.height}
+            td #{event.timestamp}
+            td
+              a(href="/account/" + event.addressFrom) #{event.addressFrom}
+            td
+              a(href="/account/" + event.addressTo) #{event.addressTo}
+            td #{event.value}
+            td #{event.fee}
+
   h4 Internal Transactions
   table.table
     thead
