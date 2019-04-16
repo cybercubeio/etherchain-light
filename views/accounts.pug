@@ -6,13 +6,12 @@ block content
     thead
       tr
         th Address
-        th Type
         th Balance (ClickCoins)
     tbody
       for account in accounts
         tr
           td 
             a(href="/account/" + account.address) #{nameformatter.format(account.address)}
-          td #{account.type}
           td #{account.balance}
-  a.btn.btn-default(href="/accounts/" + lastAccount) Next Page
+  include mixins/pagination
+  +pagination(page, pages, '/accounts')
